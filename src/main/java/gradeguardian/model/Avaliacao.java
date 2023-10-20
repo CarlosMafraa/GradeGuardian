@@ -1,12 +1,13 @@
 package gradeguardian.model;
 
-import io.swagger.v3.oas.annotations.Hidden;
+import gradeguardian.enumeration.TipoAvaliacao;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Date;
+
 
 @Entity
 @Data
@@ -18,19 +19,20 @@ public class Avaliacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String nome;
 
     private int peso;
+    private Date date;
 
-    private int id_tipo_avaliacao;
-
-    @Hidden
-    @ManyToOne
-    @JoinColumn(name = "id_tipo_avaliacao", referencedColumnName = "id")
+    @Enumerated(EnumType.STRING)
     private TipoAvaliacao tipoAvaliacao;
 
-    private long notas;
+    private Double notas;
+
+    @ManyToOne
+    @JoinColumn(name = "aluno_id")
+    private Aluno aluno;
 
 }

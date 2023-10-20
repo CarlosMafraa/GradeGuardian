@@ -1,6 +1,7 @@
 package gradeguardian.controller;
 
 import gradeguardian.model.Aluno;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import gradeguardian.service.AlunoService;
@@ -9,6 +10,7 @@ import gradeguardian.service.AlunoService;
 @RequestMapping("/aluno")
 public class AlunoController {
 
+    @Autowired
     private AlunoService alunoService;
 
     @PostMapping(value = "created")

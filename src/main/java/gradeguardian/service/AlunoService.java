@@ -3,6 +3,7 @@ package gradeguardian.service;
 import gradeguardian.repository.AlunoRepository;
 import lombok.AllArgsConstructor;
 import gradeguardian.model.Aluno;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,12 +26,14 @@ public class AlunoService {
     }
 
     public Aluno updateAluno(Aluno aluno){
-        return this.alunoRepository.save(aluno);
+        Long busca = aluno.getId();
+        Aluno alunoupdate = this.alunoRepository.findById(busca).get();
+        BeanUtils.copyProperties(aluno, alunoupdate);
+        return this.alunoRepository.save(alunoupdate);
     }
 
     public void deleteAluno(Long id){
-        Aluno deletar = this.alunoRepository.findById(id).get();
-        this.alunoRepository.delete(deletar);
+        this.alunoRepository.deleteById(id);
     }
 
 
