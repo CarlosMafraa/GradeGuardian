@@ -11,28 +11,28 @@ public class AlunoController {
 
     private AlunoService alunoService;
 
-    @PostMapping
+    @PostMapping(value = "created")
     public Aluno setAluno(@Validated @RequestBody Aluno aluno){
         return this.alunoService.createAluno(aluno);
     }
 
-    @GetMapping
+    @GetMapping(value = "readAll")
     public void getAllAluno(){
         this.alunoService.readAllAluno();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value ="readById/{id}")
     public void getByAluno(@PathVariable Long id){
         this.alunoService.readByAluno(id);
     }
 
-    @PostMapping
+    @PutMapping(value ="update/{id}")
     public Aluno updateAluno(@Validated @RequestBody Aluno aluno){
         return this.alunoService.createAluno(aluno);
     }
 
-    @GetMapping("/{id}")
-    public void DeleteByAluno(@PathVariable Long id){
+    @DeleteMapping(value ="delete/{id}")
+    public void deleteByAluno(@PathVariable Long id){
         this.alunoService.deleteAluno(id);
     }
 
