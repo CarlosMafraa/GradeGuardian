@@ -17,12 +17,12 @@ public class AvaliacaoController {
     private AvaliacaoService avaliacaoService;
 
     @PostMapping(value = "created")
-    public Avaliacao setAvaliacao(@Validated @RequestBody Avaliacao avaliacao){
+    public ResponseEntity<Avaliacao> setAvaliacao(@Validated @RequestBody Avaliacao avaliacao){
         return this.avaliacaoService.createAvaliacao(avaliacao);
     }
 
     @GetMapping(value = "readAll")
-    public List<Avaliacao> getAllAvaliacao(){
+    public ResponseEntity<List<Avaliacao>> getAllAvaliacao(){
         return this.avaliacaoService.readAllAvaliacao();
     }
 

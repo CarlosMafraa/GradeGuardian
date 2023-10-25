@@ -2,9 +2,12 @@ package gradeguardian.controller;
 
 import gradeguardian.model.Aluno;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import gradeguardian.service.AlunoService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/aluno")
@@ -14,13 +17,13 @@ public class AlunoController {
     private AlunoService alunoService;
 
     @PostMapping(value = "created")
-    public Aluno setAluno(@Validated @RequestBody Aluno aluno){
+    public ResponseEntity<Aluno> setAluno(@Validated @RequestBody Aluno aluno){
         return this.alunoService.createAluno(aluno);
     }
 
     @GetMapping(value = "readAll")
-    public void getAllAluno(){
-        this.alunoService.readAllAluno();
+    public ResponseEntity<List<Aluno>> getAllAluno(){
+        return this.alunoService.readAllAluno();
     }
 
     @GetMapping(value ="readById/{id}")
@@ -29,8 +32,8 @@ public class AlunoController {
     }
 
     @PutMapping(value ="update/{id}")
-    public Aluno updateAluno(@Validated @RequestBody Aluno aluno){
-        return this.alunoService.createAluno(aluno);
+    public ResponseEntity<Aluno> updateAluno(@Validated Long id, @RequestBody Aluno aluno){
+        return this.alunoService.updateAluno(id,aluno);
     }
 
     @DeleteMapping(value ="delete/{id}")

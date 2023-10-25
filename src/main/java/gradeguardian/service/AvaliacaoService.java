@@ -5,6 +5,7 @@ import gradeguardian.repository.AvaliacaoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +19,23 @@ public class AvaliacaoService {
     @Autowired
     private AvaliacaoRepository avaliacaoRepository;
 
-    public Avaliacao createAvaliacao(Avaliacao avaliacao){
-        return this.avaliacaoRepository.save(avaliacao);
+    public ResponseEntity<Avaliacao> createAvaliacao(Avaliacao avaliacao){
+        this.avaliacaoRepository.save(avaliacao);
+        return ResponseEntity.ok(avaliacao);
     }
 
-    public void readByAvaliacao(Long id){
-        this.avaliacaoRepository.findById(id);
+    public ResponseEntity<Avaliacao> readByAvaliacao(Long id){
+        Optional<Avaliacao> avaliacao = this.avaliacaoRepository.findById(id);
+        if(avaliacao.isEmpty()){
+            return ResponseEntity.ok(avaliacao.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    public List<Avaliacao> readAllAvaliacao(){
-        return this.avaliacaoRepository.findAll();
+    public ResponseEntity<List<Avaliacao>> readAllAvaliacao(){
+        List<Avaliacao> avaliacaos = this.avaliacaoRepository.findAll();
+        return ResponseEntity.ok(avaliacaos);
     }
 
     public ResponseEntity<Avaliacao> updateAvaliacao(Long id,Avaliacao avaliacao){
@@ -46,8 +54,14 @@ public class AvaliacaoService {
         }
     }
 
-    public void deleteAvaliacao(Long id){
-        this.avaliacaoRepository.deleteById(id);
+    public ResponseEntity<String> deleteAvaliacao(Long id){
+        if(this.avaliacaoRepository.existsById(id)){
+            this.avaliacaoRepository.deleteById(id);
+            return ResponseEntity.ok("Avaliação deletada com sucesso!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Avaliação não encontrada!");
+        }
+
     }
 
 
