@@ -17,7 +17,7 @@ public class AlunoController {
     private AlunoService alunoService;
 
     @PostMapping(value = "created")
-    public ResponseEntity<Aluno> setAluno(@Validated @RequestBody Aluno aluno){
+    public ResponseEntity<Aluno> createAluno(@Validated @RequestBody Aluno aluno){
         return this.alunoService.createAluno(aluno);
     }
 
