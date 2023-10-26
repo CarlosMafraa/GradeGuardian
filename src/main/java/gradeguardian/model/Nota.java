@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "/nota")
+@Table(name = "nota")
 public class Nota {
 
     @Hidden
@@ -21,7 +21,14 @@ public class Nota {
     private double valor;
 
     @ManyToOne
+    @JoinColumn(name = "avaliacao_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Avaliacao avaliacao;
+
+    @ManyToOne
+    @JoinColumn(name = "aluno_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Aluno aluno;
+
+
 
 
 }

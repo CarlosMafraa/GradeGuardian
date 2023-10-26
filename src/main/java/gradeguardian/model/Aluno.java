@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "/aluno")
+@Table(name = "aluno")
 
 public class Aluno {
 
@@ -26,9 +26,10 @@ public class Aluno {
 
     private String matricula;
 
-    @JsonBackReference(value = "avaliacoes")
+    @Hidden
+    @JsonBackReference(value = "notas")
     @OneToMany(mappedBy = "aluno")
-    private List<Avaliacao> avaliacoes;
+    private List<Nota> notas;
 
 }
 
