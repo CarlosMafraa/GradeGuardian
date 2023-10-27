@@ -33,7 +33,7 @@ public class AvaliacaoController {
 
 
     @PutMapping(value ="update/{id}")
-    public ResponseEntity<Avaliacao> updateAvaliacao(@PathVariable Long id, @Validated @RequestBody Avaliacao avaliacao){
+    public ResponseEntity<Avaliacao> updateAvaliacao(@PathVariable Long id,@RequestBody Avaliacao avaliacao){
         return this.avaliacaoService.updateAvaliacao(id,avaliacao);
     }
 

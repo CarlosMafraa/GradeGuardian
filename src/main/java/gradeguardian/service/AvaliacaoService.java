@@ -61,8 +61,5 @@ public class AvaliacaoService {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Avaliação não encontrada!");
         }
-
     }
-
-
 }

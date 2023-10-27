@@ -4,13 +4,19 @@ import gradeguardian.repository.AlunoRepository;
 import lombok.AllArgsConstructor;
 import gradeguardian.model.Aluno;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
+import static gradeguardian.config.CopyNonNullProperties.copyNonNullProperties;
 
 
 @Service
@@ -26,9 +32,11 @@ public class AlunoService {
 
     public ResponseEntity<Aluno> readByAluno(Long id){
         Optional<Aluno> aluno = this.alunoRepository.findById(id);
-        if (aluno.isEmpty()) {
+        if (aluno.isPresent()) {
+            System.out.printf("1");
             return ResponseEntity.ok(aluno.get());
         } else {
+            System.out.printf("2");
             return ResponseEntity.notFound().build();
         }
     }
@@ -42,8 +50,7 @@ public class AlunoService {
             Optional<Aluno> existingAluno = alunoRepository.findById(id);
             if(existingAluno.isPresent()){
                 Aluno alunoUpdate = existingAluno.get();
-                BeanUtils.copyProperties(aluno,alunoUpdate);
-                this.alunoRepository.save(alunoUpdate);
+                copyNonNullProperties(aluno, alunoUpdate);                this.alunoRepository.save(alunoUpdate);
                 return ResponseEntity.ok(alunoUpdate);
             } else {
                 return ResponseEntity.notFound().build();
@@ -61,6 +68,5 @@ public class AlunoService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado!");
         }
     }
-
 
 }

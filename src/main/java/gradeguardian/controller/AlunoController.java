@@ -16,29 +16,29 @@ public class AlunoController {
     @Autowired
     private AlunoService alunoService;
 
-    @PostMapping(value = "created")
+    @PostMapping
     public ResponseEntity<Aluno> createAluno(@Validated @RequestBody Aluno aluno){
         return this.alunoService.createAluno(aluno);
     }
 
-    @GetMapping(value = "readAll")
+    @GetMapping
     public ResponseEntity<List<Aluno>> getAllAluno(){
         return this.alunoService.readAllAluno();
     }
 
-    @GetMapping(value ="readById/{id}")
-    public void getByAluno(@PathVariable Long id){
-        this.alunoService.readByAluno(id);
+    @GetMapping(value ="/{id}")
+    public ResponseEntity<Aluno> getByAluno(@PathVariable Long id){
+        return this.alunoService.readByAluno(id);
     }
 
-    @PutMapping(value ="update/{id}")
-    public ResponseEntity<Aluno> updateAluno(@Validated Long id, @RequestBody Aluno aluno){
+    @PutMapping(value ="/{id}")
+    public ResponseEntity<Aluno> updateAluno(@PathVariable Long id, @RequestBody Aluno aluno){
         return this.alunoService.updateAluno(id,aluno);
     }
 
-    @DeleteMapping(value ="delete/{id}")
-    public void deleteByAluno(@PathVariable Long id){
-        this.alunoService.deleteAluno(id);
+    @DeleteMapping(value ="/{id}")
+    public ResponseEntity<String> deleteByAluno(@PathVariable Long id){
+        return this.alunoService.deleteAluno(id);
     }
 
 
