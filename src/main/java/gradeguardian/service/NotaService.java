@@ -1,8 +1,10 @@
 package gradeguardian.service;
 
+import gradeguardian.dto.NotaDto;
 import gradeguardian.model.Nota;
 import gradeguardian.repository.NotaRepository;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static gradeguardian.config.CopyNonNullProperties.copyNonNullProperties;
 
 @Service
 @AllArgsConstructor
@@ -18,32 +23,44 @@ public class NotaService {
     @Autowired
     public NotaRepository notaRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     public ResponseEntity<Nota> createNota(Nota nota){
         this.notaRepository.save(nota);
         return ResponseEntity.ok(nota);
     }
 
-    public ResponseEntity<Nota> readByNota(Long id){
+    public ResponseEntity<NotaDto> readByNota(Long id){
         Optional<Nota> nota = this.notaRepository.findById(id);
-        if(nota.isEmpty()){
-            return ResponseEntity.ok(nota.get());
+        if(nota.isPresent()){
+            return ResponseEntity.ok(modelMapper.map(nota.get(), NotaDto.class));
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    public ResponseEntity<List<Nota>> readAllNota(){
+    public ResponseEntity<List<NotaDto>> readAllNota(){
         List<Nota> notas = this.notaRepository.findAll();
-        return ResponseEntity.ok(notas);
+        List<NotaDto> notaDtos = notas.stream().map(
+                nota ->modelMapper.map(nota, NotaDto.class)).
+                collect(Collectors.toList());
+        return ResponseEntity.ok(notaDtos);
     }
 
     public ResponseEntity<Nota> updateNota(Long id, Nota nota){
-        Optional<Nota> existingNota = notaRepository.findById(id);
-        if(existingNota.isPresent()){
-            this.notaRepository.save(nota);
-            return ResponseEntity.ok(nota);
-        } else {
-            return ResponseEntity.notFound().build();
+        try{
+            Optional<Nota> existingNota = notaRepository.findById(id);
+            if(existingNota.isPresent()){
+                Nota notaUpdate = existingNota.get();
+                copyNonNullProperties(nota, notaUpdate);
+                this.notaRepository.save(notaUpdate);
+                return ResponseEntity.ok(notaUpdate);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
         }
     }
 

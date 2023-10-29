@@ -1,5 +1,6 @@
 package gradeguardian.controller;
 
+import gradeguardian.dto.NotaDto;
 import gradeguardian.model.Nota;
 import gradeguardian.service.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,27 +17,27 @@ public class NotaController {
     @Autowired
     private NotaService notaService;
 
-    @PostMapping(value = "created")
+    @PostMapping
     public ResponseEntity<Nota> createNota(@Validated @RequestBody Nota nota){
         return this.notaService.createNota(nota);
     }
 
-    @GetMapping(value = "readAll")
-    public ResponseEntity<List<Nota>> getAllNota(){
+    @GetMapping
+    public ResponseEntity<List<NotaDto>> getAllNota(){
         return this.notaService.readAllNota();
     }
 
-    @GetMapping(value = "readById/{id}")
-    public ResponseEntity<Nota> getNotaById(@PathVariable Long id){
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<NotaDto> getNotaById(@PathVariable Long id){
         return this.notaService.readByNota(id);
     }
 
-    @PutMapping(value = "updated/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Nota> updatedNota(@Validated @PathVariable Long id ,@RequestBody Nota nota){
         return this.notaService.updateNota(id, nota);
     }
 
-    @DeleteMapping(value = "delete/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteNota(@PathVariable Long id){
         return this.notaService.deleteNota(id);
     }

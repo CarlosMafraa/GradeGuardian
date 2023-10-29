@@ -1,5 +1,6 @@
 package gradeguardian.controller;
 
+import gradeguardian.dto.AlunoDto;
 import gradeguardian.model.Aluno;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,12 @@ public class AlunoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Aluno>> getAllAluno(){
+    public ResponseEntity<List<AlunoDto>> getAllAluno(){
         return this.alunoService.readAllAluno();
     }
 
     @GetMapping(value ="/{id}")
-    public ResponseEntity<Aluno> getByAluno(@PathVariable Long id){
+    public ResponseEntity<AlunoDto> getByAluno(@PathVariable Long id){
         return this.alunoService.readByAluno(id);
     }
 

@@ -1,5 +1,6 @@
 package gradeguardian.controller;
 
+import gradeguardian.dto.AvaliacaoDto;
 import gradeguardian.model.Avaliacao;
 import gradeguardian.service.AvaliacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,31 +17,29 @@ public class AvaliacaoController {
     @Autowired
     private AvaliacaoService avaliacaoService;
 
-    @PostMapping(value = "created")
+    @PostMapping
     public ResponseEntity<Avaliacao> setAvaliacao(@Validated @RequestBody Avaliacao avaliacao){
         return this.avaliacaoService.createAvaliacao(avaliacao);
     }
 
-    @GetMapping(value = "readAll")
-    public ResponseEntity<List<Avaliacao>> getAllAvaliacao(){
+    @GetMapping
+    public ResponseEntity<List<AvaliacaoDto>> getAllAvaliacao(){
         return this.avaliacaoService.readAllAvaliacao();
     }
 
-    @GetMapping(value ="readById/{id}")
-    public void getByAvaliacao(@PathVariable Long id){
-        this.avaliacaoService.readByAvaliacao(id);
+    @GetMapping(value ="/{id}")
+    public ResponseEntity<AvaliacaoDto> getByAvaliacao(@PathVariable Long id){
+        return this.avaliacaoService.readByAvaliacao(id);
     }
 
-
-    @PutMapping(value ="update/{id}")
+    @PutMapping(value ="/{id}")
     public ResponseEntity<Avaliacao> updateAvaliacao(@PathVariable Long id,@RequestBody Avaliacao avaliacao){
         return this.avaliacaoService.updateAvaliacao(id,avaliacao);
     }
 
-
     @DeleteMapping(value ="delete/{id}")
-    public void deletByAvaliacao(@PathVariable Long id){
-        this.avaliacaoService.deleteAvaliacao(id);
+    public ResponseEntity<String> deletByAvaliacao(@PathVariable Long id){
+        return this.avaliacaoService.deleteAvaliacao(id);
     }
 
 }

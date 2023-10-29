@@ -1,20 +1,18 @@
 package gradeguardian.service;
 
+import gradeguardian.dto.AlunoDto;
 import gradeguardian.repository.AlunoRepository;
 import lombok.AllArgsConstructor;
 import gradeguardian.model.Aluno;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import static gradeguardian.config.CopyNonNullProperties.copyNonNullProperties;
 
@@ -25,24 +23,28 @@ public class AlunoService {
 
     @Autowired
     private AlunoRepository alunoRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
     public ResponseEntity<Aluno> createAluno(Aluno aluno){
         this.alunoRepository.save(aluno);
         return ResponseEntity.ok(aluno);
     }
 
-    public ResponseEntity<Aluno> readByAluno(Long id){
+    public ResponseEntity<AlunoDto> readByAluno(Long id){
         Optional<Aluno> aluno = this.alunoRepository.findById(id);
         if (aluno.isPresent()) {
-            System.out.printf("1");
-            return ResponseEntity.ok(aluno.get());
+            return ResponseEntity.ok(modelMapper.map(aluno.get(), AlunoDto.class));
         } else {
-            System.out.printf("2");
             return ResponseEntity.notFound().build();
         }
     }
-    public ResponseEntity<List<Aluno>> readAllAluno(){
+    public ResponseEntity<List<AlunoDto>> readAllAluno(){
         List<Aluno> alunos = this.alunoRepository.findAll();
-        return ResponseEntity.ok(alunos);
+        List<AlunoDto> alunoDtos = alunos.stream().map(
+                aluno -> modelMapper.map(aluno, AlunoDto.class)).
+                collect(Collectors.toList());
+        return ResponseEntity.ok(alunoDtos);
     }
 
     public ResponseEntity<Aluno> updateAluno(Long id, Aluno aluno){
@@ -50,7 +52,8 @@ public class AlunoService {
             Optional<Aluno> existingAluno = alunoRepository.findById(id);
             if(existingAluno.isPresent()){
                 Aluno alunoUpdate = existingAluno.get();
-                copyNonNullProperties(aluno, alunoUpdate);                this.alunoRepository.save(alunoUpdate);
+                copyNonNullProperties(aluno, alunoUpdate);
+                this.alunoRepository.save(alunoUpdate);
                 return ResponseEntity.ok(alunoUpdate);
             } else {
                 return ResponseEntity.notFound().build();
@@ -69,4 +72,11 @@ public class AlunoService {
         }
     }
 
+    public ModelMapper getModelMapper() {
+        return modelMapper;
+    }
+
+    public void setModelMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 }
